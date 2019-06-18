@@ -1,6 +1,6 @@
 [submodule "pandas"]
 	path = pandas
-	url = git://github.com/pydata/pandas.git
+	url = git://github.com/robbuckley/pandas.git
 [submodule "multibuild"]
 	path = multibuild
 	url = https://github.com/matthew-brett/multibuild.git

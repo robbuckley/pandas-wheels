@@ -2,7 +2,7 @@ env:
   global:
       - REPO_DIR=pandas
       # daily branch
-      - BUILD_COMMIT=master
+      - BUILD_COMMIT=fix-pypy-build
       - PLAT=x86_64
       - UNICODE_WIDTH=32
       - MB_PYTHON_OSX_VER=10.9
