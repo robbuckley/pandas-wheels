@@ -8,11 +8,16 @@ env:
       - MB_PYTHON_OSX_VER=10.9
       - NP_BUILD_DEP="numpy==1.13.3"
       - NP_TEST_DEP="numpy==1.13.3"
-      - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
-      # Following generated with
-      # travis encrypt -r MacPython/pandas-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
-      - secure:
-          "FUNzoxHJjaTGlki4FTwW+/JsVfyulQHIAVzoc126SOWXn3noeEtW6xMurYGFSASYBT+dcPafo6HUBMlxG6a8BWjOnT5mjTWQWRYcVG435rSxrbtbZ9RvkL+E+uquDemjCEeesmCD397kYj96ZoQPbLy/B11IlaTAremyoesmA7g="
+#      - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
+#      # Following generated with
+#      # travis encrypt -r MacPython/pandas-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
+#      - secure:
+#          "FUNzoxHJjaTGlki4FTwW+/JsVfyulQHIAVzoc126SOWXn3noeEtW6xMurYGFSASYBT+dcPafo6HUBMlxG6a8BWjOnT5mjTWQWRYcVG435rSxrbtbZ9RvkL+E+uquDemjCEeesmCD397kYj96ZoQPbLy/B11IlaTAremyoesmA7g="
+      # TODO: RB S3 bucket for wheelhouse uploader
+      - WHEELHOUSE_UPLOADER_USERNAME=AKIAI5IZEYCK5KG4QQCQ
+      - CONTAINER=wheelhouse-pandas
+      # travis encrypt -r robbuckley/pandas-wheels --com WHEELHOUSE_UPLOADER_SECRET=<AWS secret access key>
+      - secure: "bQJcBB16OmOpeIR1TAfkljztxH/Yxl31VML9IDHmjeomEqHVKZPezo2ZGJRrJsQvz20vjA+JxIM2bxcb2JL5x4kdhuFdDauYads/mSmdW+OrlU1nXDVKzw7bsLw621ouG7XUSRP0fGzu3LbtoGquDRRc94vCxxUJEKhoaMRRtTpfWt32DOGHcgQVop4gCTOg0Luh6o7BwrhWRqsl7ie1pqKSOkLF0OlZFwIMPtAjpBk03APyoPLdvzxhfF7Qy05Sm8S3CZO4iVfeo5GnR8gYL3OuUShddchV6DYPSwl+VrNWZMYC+3DrKVF84D12nneVdS/BwXHzO55C+phxkaMfKb+gl2zoig1GcjDf95VQv/mtkcyoCu+6DCtmsUI8OYSM0j0gm0nWdkDRq8XMQRrq3UFIxtgdDYxOoCSkqs6P6pDIC6mpkJ8X/sbmQR8OpE/e6tWnCIjfCodx1Zt+U1CsmwdgyUUT3fxPnTh6oLpU/VkeP+lwNdTEkkbeBXttmiI1A4HbtIEd11eHGfjFzEannrfLqYJWOpfL/wkaQPk9tHcFz+jntBKH+PHvXWQsHHZxVJ1elw8DRS1Jl7LEg8IBqdrvfg1MHyu9nWycQfOZwYEgM1vIolLFZde8Vygk9gXQWF0JufaYJ6PpTlsJX2T2NfU1QYIrG5WmXE0RUv6OihQ="
 
 language: python
 # Default Python version is usually 2.7
@@ -69,7 +74,7 @@ before_install:
     # See:
     # https://github.com/travis-ci/travis-ci/issues/8920#issuecomment-352661024
     - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
-    - CONTAINER="wheels";  # pre-relesae
+    # - CONTAINER="wheels";  # pre-relesae
     - BUILD_COMMIT=$BUILD_COMMIT;
     - BUILD_DEPENDS="$NP_BUILD_DEP $EXTRA_BUILD_DEP Cython==0.28.2"
       # binary-only for cryptogrpahy. See https://github.com/pandas-dev/pandas/issues/26589
@@ -93,4 +98,5 @@ after_success:
     - python -m wheelhouse_uploader upload --local-folder
           ${TRAVIS_BUILD_DIR}/wheelhouse/
           --no-update-index
+          --provider-name S3_EU_WEST2
           $CONTAINER
